@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+
+<body>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Nombre pokemon</th>
+                <th>imagen</th>
+            </tr>
+        </thead>
+        <tbody id="pokemonlista"></tbody>
+    </table>
+
+<script>
+    const apiUrl = 'https://pokeapi.co/api/v2/pokemon/?limit=1150';
+
+    function obtenerPokemones() {
+        fetch(apiUrl)
+            .then(response => response.json())
+            .then(data => {
+                const pokemons = data.results;
+                mostrarPokemones(pokemons);
+            })
+            .catch(error => console.error('Error al obtener los datos:', error));
+    }
+
+    function mostrarPokemones(pokemons) {
+        const listaPokemones = document.getElementById('pokemonlista');
+
+        pokemons.forEach(pokemon => {
+            const row = document.createElement('tr');
+
+            const NombrePokemon = document.createElement('td');
+            NombrePokemon.textContent = pokemon.name;
+            row.appendChild(NombrePokemon); 
+
+            const imagenPokemon = document.createElement('td');
+            const imagen = document.createElement('img');
+            fetch(pokemon.url)
+                .then(response => response.json())
+                .then(data => {
+                    imagen.src = data.sprites.front_default;
+                })
+                .catch(error => console.error('', error));
+            imagenPokemon.appendChild(imagen);
+            row.appendChild(imagenPokemon);
+
+            listaPokemones.appendChild(row);
+        });
+    }
+
+    obtenerPokemones();
+</script>
+
+
+
+</body>
+
+</html>
